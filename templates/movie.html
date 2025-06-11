@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ details.title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="movie-details-container">
+        <h1>{{ details.title if details.title else "Movie Title Not Available" }}</h1>
+        <div class="movie-details-content">
+            <div class="movie-details-poster">
+                {% if details.poster %}
+                    <img src="{{ details.poster }}" alt="{{ details.title }}">
+                {% else %}
+                    <p>No poster available.</p>
+                {% endif %}
+            </div>
+            <div class="movie-details-info">
+                <p><strong>Release Date:</strong> {{ details.release_date if details.release_date != "Unknown" else "Not available" }}</p>
+                <p><strong>Overview:</strong> {{ details.overview if details.overview != "No description available." else "Not available" }}</p>
+                <p><strong>Rating:</strong> {{ "{:.1f}".format(details.rating) if details.rating else "Not available" }}/10</p>
+                {% if details.reviews %}
+                    <p><a href="{{ details.reviews }}" target="_blank">Read Reviews</a></p>
+                {% else %}
+                    <p>No reviews available.</p>
+                {% endif %}
+                <a href="/go-back" class="back-link">Go Back</a>
+            </div>
+        </div>
+        <!-- Embed the trailer video -->
+        <div class="movie-trailer">
+            {% if details.trailer %}
+                <h3>Watch Trailer</h3>
+                <div class="trailer-container">
+                    <iframe width="640" height="360" 
+                            src="{{ details.trailer }}?enablejsapi=1&rel=0&modestbranding=1" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen></iframe>
+                    <p><a href="{{ details.trailer.replace('embed/', 'watch?v=') }}" target="_blank">Open Trailer in YouTube (if it doesn't play)</a></p>
+                </div>
+            {% else %}
+                <p>No trailer available.</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
